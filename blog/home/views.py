@@ -8,11 +8,15 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .serializer import BlogPostSerializer
 from .models import BlogPost
-
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 class BlogView(APIView):
     permission_classes     = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
+    filter_backends       = [SearchFilter, OrderingFilter]
+    search_fields         = ['title', 'content']
+    ordering_fields        = ['created_at', 'updated_at']
 
     def get(self, request):
         blogs      = BlogPost.objects.all()
